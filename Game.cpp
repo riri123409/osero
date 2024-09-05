@@ -10,8 +10,6 @@ Game::Game() {
 
 void Game::play(){
     int res;
-    myboard.showBoard();
-
     myboard.Initializ_Board();
     myboard.showBoard();
 
@@ -22,7 +20,7 @@ void Game::play(){
         if(res==1){
             playerID=ANTI_PLAYER(playerID);
         }else{
-            std::cout << "player" << ANTI_PLAYER(playerID) << "‚Ì’u‚­êŠ‚ª‚ ‚è‚Ü‚¹‚ñ" << std::endl;
+            std::cout << "player" << ANTI_PLAYER(playerID) << "ã®ç½®ãå ´æ‰€ãŒã‚ã‚Šã¾ã›ã‚“" << std::endl;
             if(isGameContinue(playerID)==0){
                 isWinner();
                 break;
@@ -34,21 +32,36 @@ void Game::play(){
 void Game::setStone(int playerID){
     char inputChar;
     do{
-        std::cout << "player" << playerID << "‚Ì”Ô‚Å‚·" << std::endl;
-        std::cout << "’u‚­êŠ‚ğ“ü—Í" << std::endl;
-        std::cout << "c>";
+        std::cout << "player" << playerID << "ã®ç•ªã§ã™" << std::endl;
+        std::cout << "ç½®ãå ´æ‰€ã‚’å…¥åŠ›" << std::endl;
+        std::cout << "ç¸¦>";
         std::cin >> x;
-        std::cout << "‰¡>" ;
+        std::cout << "æ¨ª>" ;
         std::cin >> y;
     }while(checkStone(x,y,playerID));//return0
-
     board[x][y]=playerID;
+    turnoverStone(x,y,playerID);
+}
+
+void Game::turnoverStone(int x, int y, int playerID){
+    int res;
+    for(int i=-1; i<2; i++){
+        for(int j=-1; j<2; j++){
+            res=checkBoard_search(x,y,i,j,playerID);
+            std::cout << res << std::endl;
+            if(res>0){
+                for(int k=0;k<=res;k++){
+                    board[x+i*k][y+j*k]=playerID;//çŸ³ã‚’ã²ã£ãã‚Šè¿”ã™å‡¦ç†
+                }
+            }
+        }
+    }
 }
 
 bool Game::checkStone(int x, int y, int playerID){
     int res;
     if(board[x][y] != 0){
-        std::cout << "‚·‚Å‚ÉÎ‚ª‚ ‚è‚Ü‚·" << std::endl;
+        std::cout << "ã™ã§ã«çŸ³ãŒã‚ã‚Šã¾ã™" << std::endl;
         return 1;
     }
 
@@ -57,24 +70,18 @@ bool Game::checkStone(int x, int y, int playerID){
 }
 
 int Game::checkBoard(int x, int y, int playerID){
-    int res=0;
+    int res;
     int count;
 
     for(int i=-1;i<2;i++){
         for(int j=-1;j<2;j++){
             res=checkBoard_search(x,y,i,j, playerID);
-            if(res>0){//
-                for(int k=0;k<=res;k++){
-                    board[x+i*res][y+j*res]=playerID;//Î‚ğ‚Ğ‚Á‚­‚è•Ô‚·ˆ—
-                }
-            }
-            res=0;
             count=count+res;
         }
     }
 
     if(count>0){
-        return 0;//Î‚ğ‚Ğ‚Á‚­‚è•Ô‚µ‚½
+        return 0;//ã²ã£ãã‚Šè¿”ã›ã‚‹
     }
     return 1;//
 }
@@ -82,19 +89,19 @@ int Game::checkBoard(int x, int y, int playerID){
 int Game::checkBoard_search(int x, int y, int a, int b, int playerID){
     int canset=0;
     
-    for(int i=1; board[x+i*a][y+i*b] == ANTI_PLAYER(playerID); i++){//PlayerID‚ÌÎ‚ª‚ ‚éêŠ‚Ü‚Åƒ‹[ƒv
+    for(int i=1; board[x+i*a][y+i*b] == ANTI_PLAYER(playerID); i++){//PlayerIDã®çŸ³ãŒã‚ã‚‹å ´æ‰€ã¾ã§ãƒ«ãƒ¼ãƒ—
         canset=canset+1;
     }
     return canset;
 }
-//ƒvƒŒƒCƒ„[‚É’u‚­êŠ‚ª‚ ‚é‚©‚Ç‚¤‚©
+//ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼ã«ç½®ãå ´æ‰€ãŒã‚ã‚‹ã‹ã©ã†ã‹
 bool Game::isGameContinue(int playerID){
     int res;
     for(int i=1;i<BOARD_SIZE-1;i++){
         for(int j=1;j<BOARD_SIZE-1;j++){
             res=checkBoard(i,j,playerID);
             if(res==0){
-                return 1;//ƒQ[ƒ€‚ğ‘±‚¯‚é
+                return 1;//ã‚²ãƒ¼ãƒ ã‚’ç¶šã‘ã‚‹
             }
         }
     }
@@ -117,12 +124,12 @@ void Game::isWinner(){
     }
 
     if(player_one>player_second){
-        std::cout << "player1‚ÌŸ—˜‚Å‚·" << std::endl;
+        std::cout << "player1ã®å‹åˆ©ã§ã™" << std::endl;
     }
     else if(player_one<player_second){
-        std::cout << "player2‚ÌŸ—˜‚Å‚·" << std::endl;
+        std::cout << "player2ã®å‹åˆ©ã§ã™" << std::endl;
     }
     else if(player_one==player_second){
-         std::cout << "ˆø‚«•ª‚¯‚Å‚·" << std::endl;
+         std::cout << "å¼•ãåˆ†ã‘ã§ã™" << std::endl;
     }
 }

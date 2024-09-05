@@ -4,7 +4,7 @@
 #include "Board.h"
 
 #define BOARD_SIZE 10
-#define ANTI_PLAYER(anti_player) (3-(anti_player))//‘ŠèƒvƒŒƒCƒ„[
+#define ANTI_PLAYER(anti_player) (3-(anti_player))//ç›¸æ‰‹ãƒ—ãƒ¬ã‚¤ãƒ¤ãƒ¼
 
 class Game{
     private:
@@ -22,6 +22,7 @@ class Game{
     bool isGameContinue(int playerID);
     void showWinner(int playerID);
     void changePlayer();
+    void turnoverStone(int x, int y, int playerID);
     Game();
 };
 #endif

@@ -4,7 +4,7 @@
 
 #define BOARD_SIZE 10
 
-int board[BOARD_SIZE][BOARD_SIZE] = {0};  // ƒOƒ[ƒoƒ‹•Ï”‚Ì’è‹`‚Æ‰Šú‰»
+int board[BOARD_SIZE][BOARD_SIZE] = {0};  // ã‚°ãƒ­ãƒ¼ãƒãƒ«å¤‰æ•°ã®å®šç¾©ã¨åˆæœŸåŒ–
 
 void Board::Initializ_Board(){
     for(int i=0;i<BOARD_SIZE;i++){
@@ -36,11 +36,11 @@ void Board::showBoard(){
                 break;
 
             case 1:
-                printf(" ›|");
+                printf(" â—‹|");
                 break;
 
             case 2:
-                printf(" œ|");
+                printf(" â—|");
                 break;
             }
            //printf("board[%d][%d]=%d\n",i,j,board[i][j]);
