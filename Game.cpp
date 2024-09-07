@@ -48,7 +48,6 @@ void Game::turnoverStone(int x, int y, int playerID){
     for(int i=-1; i<2; i++){
         for(int j=-1; j<2; j++){
             res=checkBoard_search(x,y,i,j,playerID);
-            std::cout << res << std::endl;
             if(res>0){
                 for(int k=0;k<=res;k++){
                     board[x+i*k][y+j*k]=playerID;//石をひっくり返す処理
@@ -87,12 +86,31 @@ int Game::checkBoard(int x, int y, int playerID){
 }
 
 int Game::checkBoard_search(int x, int y, int a, int b, int playerID){
-    int canset=0;
-    
-    for(int i=1; board[x+i*a][y+i*b] == ANTI_PLAYER(playerID); i++){//PlayerIDの石がある場所までループ
-        canset=canset+1;
+    int canset = 0;
+
+    // ループしながら相手の石を見つける
+    for (int i = 1; ; i++) {
+        int newX = x + i * a;
+        int newY = y + i * b;
+
+        // 境界チェック：ボードの外に出たら終了
+        if (newX < 0 || newX >= 8 || newY < 0 || newY >= 8) {
+            return 0;
+        }
+
+        // 相手の駒がある場合
+        if (board[newX][newY] == ANTI_PLAYER(playerID)) {
+            canset++;
+        }
+        // 自分の駒がある場合
+        else if (board[newX][newY] == playerID) {
+            return canset; // 相手の駒を挟んでいるので確定
+        }
+        // 空の場所、またはそれ以外の場合
+        else {
+            return 0; // 挟めないので終了
+        }
     }
-    return canset;
 }
 //プレイヤーに置く場所があるかどうか
 bool Game::isGameContinue(int playerID){
